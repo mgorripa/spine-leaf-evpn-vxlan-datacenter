@@ -1,0 +1,22 @@
+asns:
+  spine: 65000
+  leaves_base: 65100  # leaf1=65101, leaf2=65102
+
+loopbacks:
+  spine1: 10.0.0.1/32
+  spine2: 10.0.0.2/32
+  leaf1:  10.0.1.11/32
+  leaf2:  10.0.1.12/32
+
+p2p:
+  leaf1-spine1: { a: leaf1, a_if: eth1, b: spine1, b_if: eth1, net: 10.0.10.0/31 }
+  leaf1-spine2: { a: leaf1, a_if: eth2, b: spine2, b_if: eth1, net: 10.0.10.2/31 }
+  leaf2-spine1: { a: leaf2, a_if: eth1, b: spine1, b_if: eth2, net: 10.0.10.4/31 }
+  leaf2-spine2: { a: leaf2, a_if: eth2, b: spine2, b_if: eth2, net: 10.0.10.6/31 }
+
+vrfs:
+  - name: RED
+    vni: 10000
+    vlans:
+      - { id: 10, vni: 10100, gw: 10.10.10.1/24 }
+      - { id: 20, vni: 10200, gw: 10.20.20.1/24 }
