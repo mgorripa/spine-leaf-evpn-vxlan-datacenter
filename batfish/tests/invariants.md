@@ -1,0 +1,3 @@
+- All BGP EVPN sessions Established
+- No inactive VNIs
+- Leaf VRF RED has import/export RTs per plan

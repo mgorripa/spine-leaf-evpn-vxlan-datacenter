@@ -1,0 +1,18 @@
+asn_spine: 65000
+asn_leaf_base: 65100
+router_id:
+  spine1: 10.0.0.1
+  spine2: 10.0.0.2
+  leaf1:  10.0.1.11
+  leaf2:  10.0.1.12
+
+rrs:
+  - spine1
+  - spine2
+
+vrfs:
+  - name: RED
+    vni: 10000
+    vlans:
+      - { id: 10, vni: 10100, gw: 10.10.10.1/24 }
+      - { id: 20, vni: 10200, gw: 10.20.20.1/24 }

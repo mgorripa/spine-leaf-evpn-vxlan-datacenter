@@ -1,0 +1,81 @@
+frr version 9.0
+frr defaults traditional
+hostname {{ inventory_hostname }}
+service integrated-vtysh-config
+!
+log stdout
+!
+{% set lo_ip = loopback.split('/')[0] %}
+interface lo
+ ip address {{ loopback }}
+!
+{% for ifc in interfaces %}
+interface {{ ifc.name }}
+ ip address {{ ifc.ip }}
+!
+{% endfor %}
+!
+{% for vrf in vrfs %}
+vrf {{ vrf.name }}
+ vni {{ vrf.vni }}
+exit-vrf
+{%   for vlan in vrf.vlans %}
+interface vlan{{ vlan.id }} vrf {{ vrf.name }}
+ ip address {{ vlan.gw }}
+ anycast-gateway mac 44:39:39:ff:ff:ff
+ vni {{ vlan.vni }}
+exit
+{%   endfor %}
+{% endfor %}
+!
+router bgp {{ asn }}
+ bgp router-id {{ lo_ip }}
+ no bgp default ipv4-unicast
+ neighbor EVPN_PEERS peer-group
+ remote-as 65000
+ update-source lo
+{% for rr in rrs %}
+ neighbor {{ router_id[rr] }} peer-group EVPN_PEERS
+{% endfor %}
+ address-family l2vpn evpn
+  neighbor EVPN_PEERS activate
+ exit-address-family
+!
+router bgp {{ asn }}
+ address-family l2vpn evpn
+{% for vrf in vrfs %}
+  vni {{ vrf.vni }} rd {{ lo_ip }}:{{ vrf.vni }}
+  route-target import 65000:{{ vrf.vni }}
+  route-target export 65000:{{ vrf.vni }}
+{%   for vlan in vrf.vlans %}
+  vni {{ vlan.vni }} rd {{ lo_ip }}:{{ vlan.vni }}
+  route-target import 65000:{{ vlan.vni }}
+  route-target export 65000:{{ vlan.vni }}
+  advertise-all-vni
+{%   endfor %}
+{% endfor %}
+ exit-address-family
+!
+{% for vrf in vrfs %}
+router bgp {{ asn }} vrf {{ vrf.name }}
+ address-family ipv4 unicast
+  redistribute connected
+ exit-address-family
+{% endfor %}
+!
+line vty
+!
+
+# Optional EVPN ESI (multihoming) block for leaves. Uncomment if your FRR supports it.
+# {% if role == 'leaf' %}
+# interface bond10
+#  description LAG-to-srv1
+# !
+# router bgp {{ asn }}
+#  address-family l2vpn evpn
+#   ethernet-segment 03:00:00:00:00:00:00:00:00:10
+#    redundancy multi-active
+#    df-election preference 200
+#  exit
+# exit-address-family
+# {% endif %}

@@ -1,0 +1,12 @@
+all:
+  children:
+    spines:
+      hosts:
+        spine1:
+        spine2:
+    leaves:
+      hosts:
+        leaf1:
+        leaf2:
+    servers:
+      hosts: {}

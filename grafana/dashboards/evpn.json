@@ -1,0 +1,23 @@
+{
+  "title": "EVPN Fabric Overview",
+  "panels": [
+    {
+      "type": "stat",
+      "title": "BGP EVPN Sessions Up",
+      "targets": [
+        {
+          "expr": "up{job=\"frr\"}"
+        }
+      ]
+    },
+    {
+      "type": "graph",
+      "title": "EVPN Route Count (per node)",
+      "targets": [
+        {
+          "expr": "frr_bgp_route_count"
+        }
+      ]
+    }
+  ]
+}

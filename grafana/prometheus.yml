@@ -1,0 +1,6 @@
+global:
+  scrape_interval: 10s
+scrape_configs:
+  - job_name: 'frr'
+    static_configs:
+      - targets: ['spine1:9342','spine2:9342','leaf1:9342','leaf2:9342','leaf3:9342']

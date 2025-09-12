@@ -1,0 +1,8 @@
+asn: 65000
+loopback: 10.0.0.2/32
+interfaces:
+  - { name: eth1, ip: 10.0.10.3/31 }
+  - { name: eth2, ip: 10.0.10.7/31 }
+peers:
+  - 10.0.1.11
+  - 10.0.1.12

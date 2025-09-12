@@ -1,0 +1,24 @@
+- hosts: all
+  gather_facts: no
+  vars_files:
+    - ../group_vars/all.yml
+  tasks:
+    - name: Render FRR daemons
+      when: role is defined
+      tags: [render]
+      template:
+        src: ../roles/frr/templates/daemons.j2
+        dest: configs/{{ inventory_hostname }}/daemons
+
+    - name: Render FRR config
+      tags: [render]
+      template:
+        src: ../roles/frr/templates/frr.conf.j2
+        dest: configs/{{ inventory_hostname }}/frr.conf
+
+    - name: Copy configs into containers
+      tags: [deploy]
+      shell: |
+        docker cp configs/{{ inventory_hostname }}/frr.conf {{ inventory_hostname }}:/etc/frr/frr.conf
+        docker cp configs/{{ inventory_hostname }}/daemons {{ inventory_hostname }}:/etc/frr/daemons || true
+        docker exec {{ inventory_hostname }} bash -lc "chown frr:frr /etc/frr/* && (systemctl restart frr || /usr/lib/frr/frrinit.sh restart)"
