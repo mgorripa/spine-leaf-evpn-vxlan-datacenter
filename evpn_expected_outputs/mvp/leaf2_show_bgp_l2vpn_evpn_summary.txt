@@ -1,0 +1,5 @@
+
+# leaf2 BGP EVPN Summary (2025-09-12 20:49:17)
+Neighbor        V         AS MsgRcvd MsgSent   TblVer  InQ OutQ  Up/Down State/PfxRcd
+10.0.0.1        4       65000     298     290       40    0    0 00:12:29 Estab
+10.0.0.2        4       65000     297     291       40    0    0 00:12:27 Estab

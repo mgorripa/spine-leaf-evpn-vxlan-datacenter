@@ -1,0 +1,7 @@
+
+=================== test session starts ====================
+collected 2 items
+
+tests/test_control_plane.py ..                           [100%]
+
+==================== 2 passed in 1.23s ====================

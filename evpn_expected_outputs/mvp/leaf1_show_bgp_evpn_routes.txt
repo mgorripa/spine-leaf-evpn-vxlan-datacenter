@@ -1,0 +1,6 @@
+
+# leaf1 EVPN Routes (2025-09-12 20:49:17)
+Route Distinguisher: 10.0.1.11:10100
+ * [5]:[0]:[0]:[0]:[24]:[10.10.10.0] label:10100 vni 10100
+Route Distinguisher: 10.0.1.12:10100
+ * [2]:[MAC:44:39:39:ff:ff:ff]:[IP:10.10.10.1] label:10100 vni 10100
